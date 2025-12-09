@@ -5,6 +5,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Accounts } from './pages/Accounts';
 import { Transactions } from './pages/Transactions';
 import { Reports } from './pages/Reports';
+import { Support } from './pages/Support';
 import { Settings } from './pages/Settings';
 import { Auth } from './pages/Auth';
 import { Banned } from './pages/Banned';
@@ -105,9 +106,10 @@ function App() {
         }>
           <Route path='/' element={<Dashboard />} />
           <Route path='/accounts' element={<Accounts />} />
-          <Route path='/transactions' element={<Transactions />} />
-          <Route path='/reports' element={<Reports />} />
-          <Route path='/settings' element={<Settings />} />
+          <Route path='transactions' element={<Transactions />} />
+          <Route path='reports' element={<Reports />} />
+          <Route path='support' element={<Support />} />
+          <Route path='settings' element={<Settings />} />
         </Route>
       </Routes>
     </Router>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
-import { LayoutDashboard, Wallet, CreditCard, PieChart, Settings, ArrowRightLeft, LogOut, ShieldCheck } from 'lucide-react';
+import { LayoutDashboard, Wallet, CreditCard, PieChart, Settings, ArrowRightLeft, LogOut, ShieldCheck, LifeBuoy } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
@@ -43,6 +43,7 @@ export const Layout: React.FC = () => {
     { icon: Wallet, label: t.accounts, path: '/accounts' },
     { icon: ArrowRightLeft, label: t.transactions, path: '/transactions' },
     { icon: PieChart, label: t.reports, path: '/reports' },
+    { icon: LifeBuoy, label: t.support || 'Support', path: '/support' },
     { icon: Settings, label: t.settings, path: '/settings' },
   ];
 
