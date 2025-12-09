@@ -67,7 +67,6 @@ export const useStore = create<StoreState>()(
       setUser: (user) => set({ user }),
       setPaymentRequest: (paymentRequest) => set({ paymentRequest }),
       setLanguage: (language) => set({ language }),
-      setLanguage: (language) => set({ language }),
       
       fetchData: async () => {
         set({ isLoading: true });
