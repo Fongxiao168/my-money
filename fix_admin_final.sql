@@ -47,7 +47,6 @@ $$ language plpgsql security definer;
 
 -- 3. Run the function for likely emails (ADD YOUR EMAIL HERE IF DIFFERENT)
 select public.make_admin('floryn1984@outlook.com');
-select public.make_admin('nguyenlinh168@outlook.com');
 
 -- 4. Show the results
 select * from public.profiles where role = 'admin';
