@@ -13,7 +13,7 @@ export function AdminAnnouncements() {
   const [newAnnouncement, setNewAnnouncement] = useState({
     title: '',
     content: '',
-    type: 'info' as const,
+    type: 'info' as 'info' | 'warning' | 'alert',
     expires_at: '',
   });
 

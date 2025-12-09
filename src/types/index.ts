@@ -128,4 +128,5 @@ export interface TicketMessage {
   message: string;
   is_internal: boolean;
   created_at: string;
+  profiles?: Profile;
 }

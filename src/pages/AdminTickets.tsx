@@ -7,8 +7,8 @@ import { toast } from 'sonner';
 import { Modal } from '../components/ui/Modal';
 
 export function AdminTickets() {
-  const [tickets, setTickets] = useState<any[]>([]);
-  const [selectedTicket, setSelectedTicket] = useState<any | null>(null);
+  const [tickets, setTickets] = useState<SupportTicket[]>([]);
+  const [selectedTicket, setSelectedTicket] = useState<SupportTicket | null>(null);
   const [messages, setMessages] = useState<TicketMessage[]>([]);
   const [newMessage, setNewMessage] = useState('');
   const [loading, setLoading] = useState(true);
@@ -75,7 +75,7 @@ export function AdminTickets() {
     }
   };
 
-  const handleStatusChange = async (ticketId: string, newStatus: string) => {
+  const handleStatusChange = async (ticketId: string, newStatus: 'open' | 'in_progress' | 'resolved' | 'closed') => {
     try {
       const { error } = await supabase
         .from('support_tickets')
@@ -89,7 +89,7 @@ export function AdminTickets() {
       ));
       
       if (selectedTicket?.id === ticketId) {
-        setSelectedTicket(prev => ({ ...prev, status: newStatus }));
+        setSelectedTicket(prev => prev ? { ...prev, status: newStatus } : null);
       }
       
       toast.success(`Ticket marked as ${newStatus}`);
@@ -202,7 +202,7 @@ export function AdminTickets() {
               <div className="flex gap-2 mb-4">
                 <select 
                   value={selectedTicket.status}
-                  onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value)}
+                  onChange={(e) => handleStatusChange(selectedTicket.id, e.target.value as 'open' | 'in_progress' | 'resolved' | 'closed')}
                   className="text-sm px-3 py-2 bg-white border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 dark:bg-slate-800 dark:border-slate-600 dark:text-white"
                 >
                   <option value="open">Open</option>
