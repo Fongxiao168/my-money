@@ -56,8 +56,8 @@ from auth.users
 where id not in (select id from public.profiles);
 
 -- 8. IMPORTANT: Update YOUR user to be an admin
--- Replace 'your_email@example.com' with your actual email address below and uncomment the lines:
+-- Replace 'floryn1984@outlook.com' with your actual email address below and uncomment the lines:
 
 -- update public.profiles 
 -- set role = 'admin' 
--- where email = 'your_email@example.com';
+-- where email = 'floryn1984@outlook.com';
