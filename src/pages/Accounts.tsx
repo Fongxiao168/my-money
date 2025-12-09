@@ -24,7 +24,7 @@ const accountSchema = z.object({
 type AccountFormData = z.infer<typeof accountSchema>;
 
 export const Accounts = () => {
-  const { accounts, transactions, addAccount, deleteAccount, updateAccount, profile, language } = useStore();
+  const { accounts, transactions, addAccount, deleteAccount, updateAccount, profile, language, paymentRequest } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -154,22 +154,60 @@ export const Accounts = () => {
             <div className="bg-slate-100 dark:bg-slate-800 p-4 rounded-full mb-4">
               <Wallet className="w-8 h-8 text-slate-400" />
             </div>
-            <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{t.noAccounts}</h3>
-            <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-6">
-              {t.noAccountsDesc}
-            </p>
-            <button
-              onClick={() => {
-                if (!profile?.is_premium) {
-                  setIsPaymentModalOpen(true);
-                  return;
-                }
-                setIsModalOpen(true);
-              }}
-              className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
-            >
-              {t.createFirstAccount}
-            </button>
+            
+            {paymentRequest?.status === 'pending' ? (
+              <>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{t.paymentPendingTitle}</h3>
+                <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-6 text-center">
+                  {t.paymentPending}
+                </p>
+              </>
+            ) : paymentRequest?.status === 'rejected' ? (
+              <>
+                <h3 className="text-lg font-semibold text-red-600 dark:text-red-400">{t.paymentRejectedTitle}</h3>
+                <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-6 text-center">
+                  {t.paymentRejected}
+                </p>
+                <button
+                  onClick={() => setIsPaymentModalOpen(true)}
+                  className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+                >
+                  {t.tryAgain}
+                </button>
+              </>
+            ) : profile?.is_premium ? (
+              <>
+                <h3 className="text-lg font-semibold text-green-600 dark:text-green-400">{t.paymentApprovedTitle}</h3>
+                <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-6 text-center">
+                  {t.paymentApproved}
+                </p>
+                <button
+                  onClick={() => setIsModalOpen(true)}
+                  className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+                >
+                  {t.createFirstAccount}
+                </button>
+              </>
+            ) : (
+              <>
+                <h3 className="text-lg font-semibold text-slate-900 dark:text-white">{t.noAccounts}</h3>
+                <p className="text-slate-500 dark:text-slate-400 max-w-sm mt-1 mb-6 text-center">
+                  {t.noAccountsDesc}
+                </p>
+                <button
+                  onClick={() => {
+                    if (!profile?.is_premium) {
+                      setIsPaymentModalOpen(true);
+                      return;
+                    }
+                    setIsModalOpen(true);
+                  }}
+                  className="text-blue-600 dark:text-blue-400 font-medium hover:underline"
+                >
+                  {t.createFirstAccount}
+                </button>
+              </>
+            )}
           </div>
         ) : (
           accounts.map((account) => (

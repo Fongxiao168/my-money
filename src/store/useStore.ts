@@ -8,6 +8,7 @@ import type { Language } from '../lib/i18n';
 interface StoreState {
   user: User | null;
   profile: Profile | null;
+  paymentRequest: PaymentRequest | null;
   accounts: Account[];
   transactions: Transaction[];
   categories: Category[];
@@ -51,6 +52,7 @@ export const useStore = create<StoreState>()(
     (set, get) => ({
       user: null,
       profile: null,
+      paymentRequest: null,
       accounts: [],
       transactions: [],
       categories: defaultCategories,
@@ -82,9 +84,23 @@ export const useStore = create<StoreState>()(
           .select('*')
           .eq('id', user.id)
           .single();
-          
         if (profile) set({ profile: profile as any });
 
+        // Fetch latest payment request
+        const { data: paymentRequests } = await supabase
+          .from('payment_requests')
+          .select('*')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false })
+          .limit(1);
+        
+        if (paymentRequests && paymentRequests.length > 0) {
+            set({ paymentRequest: paymentRequests[0] as any });
+        } else {
+            set({ paymentRequest: null });
+        }
+
+        const { data: accounts } = await supabase.from('accounts').select('*');
         const { data: accounts } = await supabase.from('accounts').select('*');
         const { data: transactions } = await supabase.from('transactions').select('*');
         const { data: categories } = await supabase.from('categories').select('*');

@@ -111,7 +111,12 @@ export const Auth = () => {
           return;
         }
 
-        const { data: authData, error } = await supabase.auth.signUp(credentials);
+        const { data: authData, error } = await supabase.auth.signUp({
+          ...credentials,
+          options: {
+            emailRedirectTo: window.location.origin,
+          },
+        });
         if (error) throw error;
         
         if (authData.session) {
