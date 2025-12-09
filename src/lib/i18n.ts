@@ -435,14 +435,6 @@ export const translations = {
       paymentProcessingAlert: '您的付款正在处理中，请耐心等待',
     },
     transactions: {
-    transactions: {
-      update: '更新',
-      delete: '删除',
-      noAccounts: '暂无账户',
-      noAccountsDesc: '添加您的第一个账户以开始追踪您的净资产和交易。',
-      createFirstAccount: '创建账户',
-    },
-    transactions: {
       title: '交易',
       subtitle: '追踪您的收入和支出',
       addTransaction: '添加交易',
