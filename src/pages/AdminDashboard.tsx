@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { supabase } from '../lib/supabase';
 import type { Profile, PaymentRequest } from '../types';
-import { Users, UserPlus, ShieldAlert, Activity, TrendingUp, Check, X, Eye, ExternalLink } from 'lucide-react';
+import { Users, UserPlus, ShieldAlert, Activity, TrendingUp, Check, X, Eye, ExternalLink, DollarSign } from 'lucide-react';
 import { 
   AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer,
   PieChart, Pie, Cell, Legend
@@ -12,6 +12,7 @@ import { toast } from 'sonner';
 export function AdminDashboard() {
   const [profiles, setProfiles] = useState<Profile[]>([]);
   const [paymentRequests, setPaymentRequests] = useState<PaymentRequest[]>([]);
+  const [approvedPayments, setApprovedPayments] = useState<PaymentRequest[]>([]);
   const [loading, setLoading] = useState(true);
   const [selectedRequest, setSelectedRequest] = useState<PaymentRequest | null>(null);
 
@@ -34,6 +35,14 @@ export function AdminDashboard() {
         
         if (requestsError) throw requestsError;
         setPaymentRequests(requestsData || []);
+
+        const { data: approvedData, error: approvedError } = await supabase
+          .from('payment_requests')
+          .select('*')
+          .eq('status', 'approved');
+        
+        if (approvedError) throw approvedError;
+        setApprovedPayments(approvedData || []);
 
       } catch (error) {
         console.error('Error fetching stats:', error);
@@ -104,6 +113,7 @@ export function AdminDashboard() {
   ).length;
   const bannedUsers = profiles.filter(p => p.status === 'banned').length;
   const adminCount = profiles.filter(p => p.role === 'admin').length;
+  const totalRevenue = approvedPayments.reduce((acc, curr) => acc + curr.amount, 0);
 
   // Prepare Chart Data
   const last7Days = Array.from({ length: 7 }, (_, i) => {
@@ -147,6 +157,13 @@ export function AdminDashboard() {
       {/* Stats Grid */}
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         <StatsCard 
+          title="Total Revenue" 
+          value={`$${totalRevenue.toLocaleString()}`} 
+          icon={DollarSign} 
+          color="green"
+          trend="Lifetime" 
+        />
+        <StatsCard 
           title="Total Users" 
           value={totalUsers} 
           icon={Users} 
@@ -157,7 +174,7 @@ export function AdminDashboard() {
           title="New Users (30d)" 
           value={newUsersLast30Days} 
           icon={UserPlus} 
-          color="green"
+          color="purple"
           trend={`+${newUsersLast30Days}`}
         />
         <StatsCard 
@@ -166,13 +183,6 @@ export function AdminDashboard() {
           icon={ShieldAlert} 
           color="red"
           trend="Action needed"
-        />
-        <StatsCard 
-          title="Active Admins" 
-          value={adminCount} 
-          icon={Activity} 
-          color="purple"
-          trend="Stable"
         />
       </div>
 

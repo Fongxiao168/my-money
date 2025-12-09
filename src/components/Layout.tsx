@@ -6,6 +6,7 @@ import { supabase } from '../lib/supabase';
 import { useStore } from '../store/useStore';
 import { toast } from 'sonner';
 import { translations } from '../lib/i18n';
+import { AnnouncementBanner } from './AnnouncementBanner';
 
 export const Layout: React.FC = () => {
   const location = useLocation();
@@ -152,6 +153,9 @@ export const Layout: React.FC = () => {
 
       {/* Main Content */}
       <main className="flex-1 md:ml-64 p-4 md:p-6 pb-24 md:pb-6 pt-24 md:pt-6 overflow-x-hidden">
+        <div className="mb-6">
+          <AnnouncementBanner />
+        </div>
         <div className="max-w-7xl mx-auto animate-in fade-in slide-in-from-bottom-4 duration-500">
           <Outlet />
         </div>

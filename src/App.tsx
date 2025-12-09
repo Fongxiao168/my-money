@@ -14,6 +14,10 @@ import { supabase } from './lib/supabase';
 import { AdminLayout } from './components/AdminLayout';
 import { AdminDashboard } from './pages/AdminDashboard';
 import { AdminUsers } from './pages/AdminUsers';
+import { AdminAnnouncements } from './pages/AdminAnnouncements';
+import { AdminLogs } from './pages/AdminLogs';
+import { AdminSettings } from './pages/AdminSettings';
+import { AdminTickets } from './pages/AdminTickets';
 import AdminChat from './pages/AdminChat';
 import ChatWidget from './components/ChatWidget';
 
@@ -86,6 +90,10 @@ function App() {
         }>
           <Route index element={<AdminDashboard />} />
           <Route path='users' element={<AdminUsers />} />
+          <Route path='announcements' element={<AdminAnnouncements />} />
+          <Route path='logs' element={<AdminLogs />} />
+          <Route path='settings' element={<AdminSettings />} />
+          <Route path='tickets' element={<AdminTickets />} />
           <Route path='chat' element={<AdminChat />} />
         </Route>
 

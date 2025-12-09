@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Link, Outlet, useNavigate, useLocation } from 'react-router-dom';
 import { useStore } from '../store/useStore';
 import { supabase } from '../lib/supabase';
-import { LayoutDashboard, Users, LogOut, Home, Menu, X, MessageSquare } from 'lucide-react';
+import { LayoutDashboard, Users, LogOut, Home, Menu, X, MessageSquare, Bell, Shield, Settings, Ticket } from 'lucide-react';
 
 export function AdminLayout() {
   const { resetData } = useStore();
@@ -21,6 +21,10 @@ export function AdminLayout() {
   const navItems = [
     { path: '/admin', icon: LayoutDashboard, label: 'Dashboard' },
     { path: '/admin/users', icon: Users, label: 'Users' },
+    { path: '/admin/announcements', icon: Bell, label: 'Announcements' },
+    { path: '/admin/tickets', icon: Ticket, label: 'Support Tickets' },
+    { path: '/admin/logs', icon: Shield, label: 'Audit Logs' },
+    { path: '/admin/settings', icon: Settings, label: 'System Settings' },
     { path: '/admin/chat', icon: MessageSquare, label: 'Live Support' },
   ];
 

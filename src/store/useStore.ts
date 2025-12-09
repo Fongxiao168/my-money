@@ -15,6 +15,11 @@ interface StoreState {
   settings: Settings;
   isLoading: boolean;
   language: Language;
+  systemStatus: {
+    maintenance: boolean;
+    alert: boolean;
+    message?: string;
+  };
   
   setUser: (user: User | null) => void;
   setPaymentRequest: (request: PaymentRequest | null) => void;
@@ -64,6 +69,7 @@ export const useStore = create<StoreState>()(
       },
       isLoading: false,
       language: 'en',
+      systemStatus: { maintenance: false, alert: false },
       setUser: (user) => set({ user }),
       setPaymentRequest: (paymentRequest) => set({ paymentRequest }),
       setLanguage: (language) => set({ language }),
@@ -100,6 +106,35 @@ export const useStore = create<StoreState>()(
         } else {
             set({ paymentRequest: null });
         }
+
+        // Check System Status (Maintenance & Alerts)
+        const { data: settingsData } = await supabase
+          .from('system_settings')
+          .select('*')
+          .eq('key', 'maintenance_mode')
+          .single();
+        
+        const { data: alertData } = await supabase
+          .from('announcements')
+          .select('*')
+          .eq('type', 'alert')
+          .eq('is_active', true)
+          .or(`expires_at.is.null,expires_at.gt.${new Date().toISOString()}`)
+          .limit(1);
+
+        const isMaintenance = settingsData?.value?.enabled || false;
+        const isAlert = (alertData && alertData.length > 0) || false;
+        const statusMessage = isMaintenance 
+          ? (settingsData?.value?.message || 'System is under maintenance') 
+          : (isAlert ? 'System is under high alert' : undefined);
+
+        set({ 
+          systemStatus: { 
+            maintenance: isMaintenance, 
+            alert: isAlert,
+            message: statusMessage
+          } 
+        });
 
         const { data: accounts } = await supabase.from('accounts').select('*');
         const { data: transactions } = await supabase.from('transactions').select('*');

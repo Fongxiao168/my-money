@@ -44,7 +44,7 @@ const transactionSchema = z.object({
 type TransactionFormData = z.infer<typeof transactionSchema>;
 
 export const Transactions = () => {
-  const { transactions, accounts, categories, addTransaction, updateTransaction, deleteTransaction, profile, language } = useStore();
+  const { transactions, accounts, categories, addTransaction, updateTransaction, deleteTransaction, profile, language, systemStatus } = useStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isPaymentModalOpen, setIsPaymentModalOpen] = useState(false);
   const [editingId, setEditingId] = useState<string | null>(null);
@@ -143,7 +143,25 @@ export const Transactions = () => {
       }
     });
   };
+  const handleAddTransaction = () => {
+    if (systemStatus.maintenance || systemStatus.alert) {
+      toast.error(systemStatus.message || 'Transactions are currently disabled');
+      return;
+    }
+    setEditingId(null);
+    reset({
+      type: 'expense',
+      date: new Date().toISOString().split('T')[0],
+      category: 'Food & Dining'
+    });
+    setIsModalOpen(true);
+  };
+
   const handleEdit = (transaction: any) => {
+    if (systemStatus.maintenance || systemStatus.alert) {
+      toast.error(systemStatus.message || 'Transactions are currently disabled');
+      return;
+    }
     if (!profile?.is_premium) {
       setIsPaymentModalOpen(true);
       return;
@@ -162,6 +180,10 @@ export const Transactions = () => {
   };
 
   const handleDelete = (id: string) => {
+    if (systemStatus.maintenance || systemStatus.alert) {
+      toast.error(systemStatus.message || 'Transactions are currently disabled');
+      return;
+    }
     if (!profile?.is_premium) {
       setIsPaymentModalOpen(true);
       return;
@@ -282,14 +304,13 @@ export const Transactions = () => {
           <p className="text-slate-500 dark:text-slate-400 mt-1">{t.subtitle}</p>
         </div>
         <button
-          onClick={() => {
-            if (!profile?.is_premium) {
-              setIsPaymentModalOpen(true);
-              return;
-            }
-            setIsModalOpen(true);
-          }}
-          className="flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-xl font-medium transition-colors shadow-lg shadow-blue-600/20 w-full md:w-auto justify-center"
+          onClick={handleAddTransaction}
+          disabled={systemStatus.maintenance || systemStatus.alert}
+          className={`flex items-center gap-2 px-4 py-2 rounded-xl font-medium transition-colors shadow-lg shadow-blue-600/20 w-full md:w-auto justify-center ${
+            systemStatus.maintenance || systemStatus.alert
+              ? 'bg-gray-400 cursor-not-allowed text-white'
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
+          }`}
         >
           <Plus className="w-5 h-5" />
           {t.addTransaction}

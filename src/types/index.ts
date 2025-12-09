@@ -79,3 +79,53 @@ export interface ChatSettings {
   is_enabled: boolean;
   updated_at: string;
 }
+
+export interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  type: 'info' | 'warning' | 'alert';
+  is_active: boolean;
+  created_by: string;
+  created_at: string;
+  expires_at?: string;
+}
+
+export interface AdminLog {
+  id: string;
+  admin_id: string;
+  action: string;
+  target_resource: string;
+  target_id?: string;
+  details?: any;
+  ip_address?: string;
+  created_at: string;
+}
+
+export interface SystemSetting {
+  key: string;
+  value: any;
+  description?: string;
+  updated_at: string;
+  updated_by?: string;
+}
+
+export interface SupportTicket {
+  id: string;
+  user_id: string;
+  subject: string;
+  status: 'open' | 'in_progress' | 'resolved' | 'closed';
+  priority: 'low' | 'medium' | 'high' | 'urgent';
+  created_at: string;
+  updated_at: string;
+  profiles?: Profile;
+}
+
+export interface TicketMessage {
+  id: string;
+  ticket_id: string;
+  sender_id: string;
+  message: string;
+  is_internal: boolean;
+  created_at: string;
+}
