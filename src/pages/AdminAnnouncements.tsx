@@ -113,7 +113,7 @@ export function AdminAnnouncements() {
       },
       warning: {
         title: 'Scheduled Maintenance',
-        content: 'Scheduled maintenance will occur soon. The site may be slow for a short period.'
+        content: 'Please be advised: Scheduled maintenance will occur soon. The site may be slow for a short period.'
       },
       alert: {
         title: 'Service Interruption',
