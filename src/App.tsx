@@ -17,12 +17,15 @@ import { AdminUsers } from './pages/AdminUsers';
 import AdminChat from './pages/AdminChat';
 import ChatWidget from './components/ChatWidget';
 
+import { AdminLogin } from './pages/AdminLogin';
+
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
   const { user, profile, isLoading } = useStore();
   
   if (isLoading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
   if (!user) return <Navigate to="/auth" replace />;
   if (profile?.status === 'banned') return <Navigate to="/banned" replace />;
+  if (profile?.role === 'admin') return <Navigate to="/admin" replace />;
   
   return <>{children}</>;
 }
@@ -31,7 +34,7 @@ function ProtectedAdminRoute({ children }: { children: React.ReactNode }) {
   const { user, profile, isLoading } = useStore();
   
   if (isLoading) return <div className="flex items-center justify-center h-screen">Loading...</div>;
-  if (!user) return <Navigate to="/auth" replace />;
+  if (!user) return <Navigate to="/admin/login" replace />;
   if (profile?.status === 'banned') return <Navigate to="/banned" replace />;
   if (profile?.role !== 'admin') return <Navigate to="/" replace />;
   
@@ -72,6 +75,7 @@ function App() {
       <ChatWidget />
       <Routes>
         <Route path='/auth' element={<Auth />} />
+        <Route path='/admin/login' element={<AdminLogin />} />
         <Route path='/banned' element={<Banned />} />
         
         {/* Admin Routes */}

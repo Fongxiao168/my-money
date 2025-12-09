@@ -248,15 +248,6 @@ export const Settings = () => {
                 {profile?.role || 'user'}
               </span>
             </div>
-            {profile?.role === 'admin' && (
-              <button
-                onClick={() => navigate('/admin')}
-                className="ml-auto p-2 bg-white/10 hover:bg-white/20 rounded-lg transition-colors"
-                title="Go to Admin Panel"
-              >
-                <ShieldCheck className="w-6 h-6 text-white" />
-              </button>
-            )}
           </div>
         </CardContent>
       </Card>

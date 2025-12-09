@@ -10,7 +10,7 @@ import { translations } from '../lib/i18n';
 export const Layout: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
-  const { setUser, resetData, profile, language } = useStore();
+  const { user, setUser, resetData, profile, language } = useStore();
   
   const validLanguage = (language && translations[language]) ? language : 'en';
   const t = translations[validLanguage].sidebar;
@@ -79,16 +79,6 @@ export const Layout: React.FC = () => {
               </Link>
             );
           })}
-
-          {profile?.role === 'admin' && (
-            <Link
-              to="/admin"
-              className="flex items-center gap-3 px-4 py-3 rounded-xl font-medium transition-all duration-200 group text-purple-600 dark:text-purple-400 hover:bg-purple-50 dark:hover:bg-purple-900/20"
-            >
-              <ShieldCheck className="w-5 h-5" />
-              {t.adminPanel}
-            </Link>
-          )}
         </nav>
 
         <div className="p-4 border-t border-slate-200 dark:border-slate-800">

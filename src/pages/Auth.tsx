@@ -78,6 +78,24 @@ export const Auth = () => {
       if (isLogin) {
         const { error } = await supabase.auth.signInWithPassword(credentials);
         if (error) throw error;
+        
+        // Check if user is admin and prevent login here
+        const { data: { user } } = await supabase.auth.getUser();
+        if (user) {
+          const { data: profile } = await supabase
+            .from('profiles')
+            .select('role')
+            .eq('id', user.id)
+            .single();
+
+          if (profile?.role === 'admin') {
+            await supabase.auth.signOut();
+            toast.error("Please use the Admin Portal to sign in.");
+            setIsLoading(false);
+            return;
+          }
+        }
+
         toast.success(t.welcomeBack);
       } else {
         // Check if user already exists in profiles to prevent duplicates
